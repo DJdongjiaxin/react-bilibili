@@ -34,7 +34,7 @@ const URL_HOT_WORD = "https://s.search.bilibili.com/main/hotword";
 const URL_SUGGEST = "https://s.search.bilibili.com/main/suggest";
 // 搜索
 // const URL_SEARCH = "https://m.bilibili.com/search/searchengine";
-const URL_SEARCH = "https://api.bilibili.com/x/web-interface/search/type";
+const URL_SEARCH = "https://api.bilibili.com/x/web-interface/wbi/search/type";
 
 
 // 直播首页
@@ -162,11 +162,8 @@ const fetchSuggest = (w) => {
 
 const fetchSearchContent = (param) => {
   param = {
-    keyword: param.keyword,
-    page: param.page,
-    pagesize: param.size,
-    search_type: param.searchType, // video（综合） media_bangumi(番剧) bili_user（up主）
-    order: param.order // totalrank（默认） click（播放多） pubdate（发布日期） dm（弹幕）
+    keyword: "mc",
+    search_type: "bili_user", // video（综合） media_bangumi(番剧) bili_user（up主）
   };
   return fetch(URL_SEARCH + `?${querystring.stringify(param)}`, {
       method: "get"

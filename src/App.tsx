@@ -3,10 +3,10 @@ import { Helmet } from "react-helmet";
 import { Redirect, Switch } from "react-router-dom";
 import router, { NestedRoute, StatusRoute } from "./router";
 import Context, { context } from "./context";
+import Tabbar from "./components/tab/TabBar";
 
 import "./assets/stylus/icon.styl";
 import "./app.styl";
-
 class App extends React.Component {
   public render() {
     return (
@@ -18,6 +18,7 @@ class App extends React.Component {
             <meta name="keywords" content="React,服务端渲染" />
             <meta name="description" content="高仿Bilibili" />
           </Helmet>
+          <Tabbar onClick={console.log("####")}></Tabbar>
           <Switch>
             {
               router.map((route, i) =>
