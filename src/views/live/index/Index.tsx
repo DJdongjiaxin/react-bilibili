@@ -98,7 +98,7 @@ function Index(props: IndexProps) {
                         }
                         return (
                           <a className={style.roomWrapper} key={data.roomId}
-                            href={`/live/${data.roomId}`}>
+                            href={`https://live.bilibili.com/h5/${data.roomId}`}>
                             <LiveInfo data={data} />
                           </a>
                         )
