@@ -15,12 +15,6 @@ export function getUserVideos(aId: number, p: number, size: number) {
   return getJSON(URL_USER_VIDEO, { uId: aId, p, size });
 }
 
-/**
- * TEST 获取所有用户基础信息
- */
-export function getAllUserInfo() {
-  return getJSON(URL_GET_USER_INFO, null);
-}
 
 
 /**

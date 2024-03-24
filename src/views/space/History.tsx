@@ -5,12 +5,8 @@ import { formatDate } from "../../util/datetime";
 
 import tips from "../../assets/images/nocontent.png";
 import style from "./history.styl?css-modules";
-import { getAllUserInfo } from "../../api/up-user";
-const getInfo = () => {
-  getAllUserInfo().then((result) => {
-    console.log(JSON.stringify(result));
-  });
-}
+
+
 
 const getDateKey = (timestamp) => {
   const currentTime = new Date();
@@ -69,7 +65,6 @@ class History extends React.Component<null, HistoryState> {
     }
   }
   public componentDidMount() {
-    getInfo()
     const viewHistories = storage.getViewHistory();
     // 按点击时间降序
     viewHistories.sort((a, b) => b.viewAt - a.viewAt);
