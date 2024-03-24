@@ -14,6 +14,13 @@ const Login: React.FC = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
+    React.useEffect(() => {
+        const eyeUser = localStorage.getItem('eyeUser');
+        if (eyeUser) {
+            // 如果本地存储中有 eyeUser，跳转到 /space 页面
+            window.location.href = '/space';
+        }
+    }, [])
     const handleLogin = (number, password) => {
         login(number, password).then((result) => {
             console.log(JSON.stringify(result) + "####");
@@ -21,6 +28,7 @@ const Login: React.FC = () => {
                 console.log(JSON.stringify(result.data));
                 localStorage.setItem('eyeUser', JSON.stringify(result.data));
                 setErrorMessage('');
+                window.location.href = '/space';
             } else {
                 setErrorMessage(result.msg);
             }
