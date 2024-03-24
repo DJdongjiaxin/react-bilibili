@@ -53,6 +53,7 @@ const getTime = (timestamp) => {
 interface HistoryState {
   itemIndex: number;
   histories: Array<[string, ViewHistory[]]>;
+  userRole: number;
 }
 
 class History extends React.Component<null, HistoryState> {
@@ -61,10 +62,17 @@ class History extends React.Component<null, HistoryState> {
 
     this.state = {
       itemIndex: 0,
-      histories: []
+      histories: [],
+      userRole: 0
     }
   }
   public componentDidMount() {
+    const eyeUser = localStorage.getItem("eyeUser");
+
+    if (eyeUser) {
+      const userData = JSON.parse(eyeUser);
+      this.setState({ userRole: userData[0].role });
+    }
     const viewHistories = storage.getViewHistory();
     // 按点击时间降序
     viewHistories.sort((a, b) => b.viewAt - a.viewAt);
@@ -87,6 +95,7 @@ class History extends React.Component<null, HistoryState> {
     });
   }
   public render() {
+    const isAdmin = this.state.userRole === 2;
     return (
       <div className="history">
         <Helmet>
@@ -101,6 +110,16 @@ class History extends React.Component<null, HistoryState> {
             onClick={() => { this.setState({ itemIndex: 1 }) }}>
             <span>我的投稿</span>
           </div>
+          {isAdmin && (
+            <div
+              className={style.tabItem + (this.state.itemIndex === 2 ? " " + style.current : "")}
+              onClick={() => {
+                this.setState({ itemIndex: 2 });
+              }}
+            >
+              <span>平台管理</span>
+            </div>
+          )}
         </div>
         <div className={style.history} style={{ display: this.state.itemIndex === 0 ? "block" : "none" }}>
           {
@@ -134,6 +153,7 @@ class History extends React.Component<null, HistoryState> {
               </div>
             ) : null
           }
+
         </div>
         <div style={{ display: this.state.itemIndex === 1 ? "block" : "none" }}>
           <div className={style.tips}>
@@ -141,6 +161,25 @@ class History extends React.Component<null, HistoryState> {
             <div className={style.text}>小哔睡着了~</div>
           </div>
         </div>
+        {isAdmin && (
+          <div
+            style={{ display: this.state.itemIndex === 2 ? "block" : "none" }}
+            className={style.platformManagement}
+          >
+            <div className={style.managementItem}>
+              <span>用户管理</span>
+            </div>
+            <div className={style.managementItem}>
+              <span>视频管理</span>
+            </div>
+            <div className={style.managementItem}>
+              <span>评论管理</span>
+            </div>
+            <div className={style.managementItem}>
+              <span>查看反馈信息</span>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
