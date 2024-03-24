@@ -23,12 +23,21 @@ export default function Tabbar({ onClick }) {
       myElement.classList.remove('current');
     }
   }, []);
-
+  const getHref = () => {
+    const eyeUser = localStorage.getItem('eyeUser');
+    if (eyeUser) {
+      // 如果本地存储中有 eyeUser，跳转到 /space 页面
+      window.location.href = '/space';
+    } else {
+      // 如果本地存储中没有 eyeUser，跳转到 /login 页面
+      window.location.href = '/login';
+    }
+  };
   return (
     <div className='tabbar'>
       <div className='tabbar_btn home current' onClick={() => { handleClick('index') }}></div>
       <div className='tabbar_btn camera' onClick={onClick}></div>
-      <div className='tabbar_btn my' onClick={() => { handleClick('space') }}></div>
+      <div className='tabbar_btn my' onClick={() => { getHref() }}></div>
     </div>
   );
 }
