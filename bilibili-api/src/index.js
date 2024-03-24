@@ -8,7 +8,7 @@ const userAgent = require("./middleware/user-agent");
 const log = require("./middleware/log");
 const routers = require("./routers");
 const log4js = require("./log4js");
-const mysql = require("mysql");
+// const mysql = require("mysql");
 
 const logger = log4js.getLogger(process.env.LOG_CATEGORY);
 
@@ -34,22 +34,24 @@ app.use(crossDomain);
 
 app.use(routers);
 
-// 数据库连接
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'Djx0905#',
-  database: 'eyepetizer'
-})
+// // 数据库连接
+// const connection = mysql.createConnection({
+//   host: 'localhost',
+//   user: 'root',
+//   password: 'Djx0905#',
+//   database: 'eyepetizer'
+// })
 
-connection.connect((err) => {
-  if (err) {
-    console.error('ERROR CONNECT MYSQL DATABASE');
-    return;
-  }else{
-    console.log('success connect mysql database')
-  }
-})
+// connection.connect((err) => {
+//   if (err) {
+//     console.error('ERROR CONNECT MYSQL DATABASE');
+//     return;
+//   }else{
+//     console.log('success connect mysql database')
+//   }
+// })
+
+
 // Error handling
 app.use(function (err, req, res, next) {
   logger.error(err.stack);

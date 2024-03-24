@@ -1,26 +1,29 @@
-const Sequelize = require("sequelize");
-
-// 创建一个新的Sequelize实例
-const DB = new Sequelize("eyepetizer", "root", "Djx0905#", {
-    host: "localhost", // 主机地址
-    port: 3306, // 数据库端口号
-    dialect: "mysql", // 数据库类型
-    pool: {
-        max: 5, // 最大连接数量
-        min: 0, // 最小连接数量
-        idle: 10000, // 如果10秒内没有被使用，释放该连接
+const mysql = require('mysql');
+module.exports = {
+    // 数据库配置
+    config: {
+        host: 'localhost',
+        port: '3306',
+        user: 'root',
+        password: 'Djx0905#',
+        database: 'eyepetizer'
     },
-    logging: false, // 禁用Sequelize日志输出
-});
+    // 链接数据库 使用mysql的连接池
+    sqlConnect: function (sql, sqlArr, callBack) {
+        var pool = mysql.createPool(this.config);
+        pool.getConnection((err, conn) => {
+            console.log("%%%%%%%%%%%%%%%%%%%%%%");
+            if (err) {
+                console.error('ERROR CONNECT MYSQL DATABASE');
+                return;
+            } else {
+                console.log('success connect mysql database')
+            }
+            // 事件驱动回调
+            conn.query(sql, sqlArr, callBack);
+            // 释放连接
+            conn.release();
+        })
+    }
 
-// 测试数据库连接
-DB
-    .authenticate()
-    .then(() => {
-        console.log("数据库连接成功");
-    })
-    .catch((err) => {
-        console.error("数据库连接失败:", err);
-    });
-
-module.exports = DB;
+}

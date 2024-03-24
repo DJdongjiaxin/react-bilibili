@@ -13,6 +13,8 @@ export function getJSON(url: string, data) {
       param = "?" + datas.join("&");
     }
   }
+  console.log(param+"%%%%%%%");
+  
   return fetch(url + param)
     .then((res) => {
       if (res.ok) {

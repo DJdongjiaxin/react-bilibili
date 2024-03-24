@@ -32,6 +32,13 @@ const URL_LIVE_ROOM_GIFT = prefix + "/live/room/gifts";
 const URL_LIVE_PLAY_URL = prefix + "/live/room/play_url";
 const URL_LIVE_DANMU_CONFIG = prefix + "/live/room/danmu_config";
 
+
+// 用户相关
+const URL_GET_USER_INFO = prefix + "/user/search";
+// 用户登录
+const URL_USER_LOGIN = prefix + "/user/login";
+// 用户注册
+const URL_USER_REGISTER = prefix + "/user/register";
 export {
   URL_INDEX,
   URL_ROUND_SOWING,
@@ -56,5 +63,8 @@ export {
   URL_LIVE_ROOM_INFO,
   URL_LIVE_ROOM_GIFT,
   URL_LIVE_PLAY_URL,
-  URL_LIVE_DANMU_CONFIG
+  URL_LIVE_DANMU_CONFIG,
+  URL_GET_USER_INFO,
+  URL_USER_LOGIN,
+  URL_USER_REGISTER
 }

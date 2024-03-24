@@ -5,6 +5,7 @@ const videoRouter = require("./video");
 const upUserRouter = require("./up-user");
 const searchRouter = require("./search");
 const transferRouter = require("./transfer");
+const userRouter=require("./user");
 
 const liveRouter = require("./live");
 
@@ -17,5 +18,6 @@ router.use(upUserRouter);
 router.use(searchRouter);
 router.use(transferRouter);
 router.use(liveRouter);
+router.use(userRouter);
 
 module.exports = router;

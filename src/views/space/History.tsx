@@ -5,6 +5,12 @@ import { formatDate } from "../../util/datetime";
 
 import tips from "../../assets/images/nocontent.png";
 import style from "./history.styl?css-modules";
+import { getAllUserInfo } from "../../api/up-user";
+const getInfo = () => {
+  getAllUserInfo().then((result) => {
+    console.log(JSON.stringify(result));
+  });
+}
 
 const getDateKey = (timestamp) => {
   const currentTime = new Date();
@@ -63,6 +69,7 @@ class History extends React.Component<null, HistoryState> {
     }
   }
   public componentDidMount() {
+    getInfo()
     const viewHistories = storage.getViewHistory();
     // 按点击时间降序
     viewHistories.sort((a, b) => b.viewAt - a.viewAt);
@@ -92,15 +99,15 @@ class History extends React.Component<null, HistoryState> {
         </Helmet>
         <div className={style.tabWrapper}>
           <div className={style.tabItem + (this.state.itemIndex === 0 ? " " + style.current : "")}
-            onClick={() => {this.setState({itemIndex: 0})}}>
+            onClick={() => { this.setState({ itemIndex: 0 }) }}>
             <span>历史记录</span>
           </div>
           <div className={style.tabItem + (this.state.itemIndex === 1 ? " " + style.current : "")}
-            onClick={() => {this.setState({itemIndex: 1})}}>
+            onClick={() => { this.setState({ itemIndex: 1 }) }}>
             <span>我的投稿</span>
           </div>
         </div>
-        <div className={style.history} style={{display: this.state.itemIndex === 0 ? "block" : "none"}}>
+        <div className={style.history} style={{ display: this.state.itemIndex === 0 ? "block" : "none" }}>
           {
             this.state.histories.map((item, i) => (
               <div className={style.historyItem} key={i}>
@@ -133,7 +140,7 @@ class History extends React.Component<null, HistoryState> {
             ) : null
           }
         </div>
-        <div style={{display: this.state.itemIndex === 1 ? "block" : "none"}}>
+        <div style={{ display: this.state.itemIndex === 1 ? "block" : "none" }}>
           <div className={style.tips}>
             <img src={tips} />
             <div className={style.text}>小哔睡着了~</div>

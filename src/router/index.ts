@@ -64,6 +64,10 @@ const router = [
     component: loadable(() => import(/* webpackChunkName: 'search' */ "../views/search/Search"))
   },
   {
+    path: "/login",
+    component: loadable(() => import(/* webpackChunkName: 'search' */ "../views/login/login"))
+  },
+  {
     path: "/live",
     component: loadable(() => import(/* webpackChunkName: 'live-index' */ "../containers/live/Index")),
     exact: true,
