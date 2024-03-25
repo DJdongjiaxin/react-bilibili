@@ -46,6 +46,10 @@ const router = [
     component: loadable(() => import(/* webpackChunkName: 'search' */ "../views/adminManagement/AdminManagement")),
   },
   {
+    path: "/public",
+    component: loadable(() => import(/* webpackChunkName: 'search' */ "../views/public/Public")),
+  },
+  {
     path: "/space",
     component: loadable(() => import(/* webpackChunkName: 'space' */ "../views/space/Space")),
     routes: [
