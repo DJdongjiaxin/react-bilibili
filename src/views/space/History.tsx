@@ -168,11 +168,34 @@ class History extends React.Component<null, HistoryState> {
           }
 
         </div>
-        <div style={{ display: this.state.itemIndex === 1 ? "block" : "none" }}>
-          <div className={style.tips}>
-            <img src={tips} />
-            <div className={style.text}>{JSON.stringify(this.state.videoList)}~</div>
-          </div>
+        <div className={style.history} style={{ display: this.state.itemIndex === 1 ? "block" : "none" }}>
+          {
+            this.state.videoList.map((item, i) => (
+              <div className={style.historyItem} key={i}>
+                <div className={style.itemTitle}>{item.videoname}</div>
+                    <div className={style.itemWrapper}>
+                      <a href={"/video?"+item.id}>
+                        <div className={style.imgContainer}>
+                          <img src={`http://localhost:3011/${item.cover_image}`} />
+                        </div>
+                        <div className={style.info}>
+                          <div className={style.title}>{item.description}</div>
+                          {/* <div className={style.time}>{getTime(history.viewAt)}</div> */}
+                        </div>
+                      </a>
+                    </div>
+              </div>
+            ))
+          }
+          {
+            this.state.videoList.length === 0 ? (
+              <div className={style.tips}>
+                <img src={tips} />
+                <div className={style.text}>{JSON.stringify(this.state.videoList)}~</div>
+              </div>
+            ) : null
+          }
+
         </div>
         {isAdmin && (
           <div
