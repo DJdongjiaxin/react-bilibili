@@ -96,10 +96,9 @@ router.get('/user/searchAll', async (req, res, next) => {
   dbConfig.sqlConnect(sql, sqlArr, callBack)
 });
 
-router.get('/user/searchByNumber', async (req, res, next) => {
-  let { number } = req.query;
-  var sql = "select * from user where number=?";
-  var sqlArr = [number];
+router.post('/user/searchByNumber', async (req, res, next) => {
+  var sql = "select * from user ";
+  var sqlArr = [];
   var callBack = (err, data) => {
     if (err) {
       console.log("error!!!!!");
@@ -112,7 +111,7 @@ router.get('/user/searchByNumber', async (req, res, next) => {
   dbConfig.sqlConnect(sql, sqlArr, callBack)
 });
 
-router.post('/user/searchByUsername', async (req, res, next) => {
+router.get('/user/searchByUsername', async (req, res, next) => {
   var sql = "select * from user where username=?";
   var sqlArr = [];
   var callBack = (err, data) => {

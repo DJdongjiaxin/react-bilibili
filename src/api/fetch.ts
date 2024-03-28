@@ -25,16 +25,26 @@ export function getJSON(url: string, data) {
 }
 
 export function postJSON(url: string, data) {
+  let headers = {};
+
+  if (data instanceof FormData) {
+    console.log("data is formData");
+    
+  } else {
+    headers = {
+      "Content-Type": "application/json; charset=utf-8"
+    };
+    data = JSON.stringify(data);
+  }
+
   return fetch(url, {
     method: "post",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json; charset=utf-8"
-    }
+    body: data,
+    headers: headers
   }).then((res) => {
     if (res.ok) {
       return res.json();
     }
     throw new Error(res.statusText);
-  })
+  });
 }

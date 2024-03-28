@@ -39,6 +39,10 @@ const URL_GET_USER_INFO = prefix + "/user/search";
 const URL_USER_LOGIN = prefix + "/user/login";
 // 用户注册
 const URL_USER_REGISTER = prefix + "/user/register";
+// 投稿能力
+const URL_SEND_VIDEO = prefix + "/video/send";
+// 查询用户投稿视频
+const URL_GET_VIDEO_INFO = prefix + "/video/getVideo";
 export {
   URL_INDEX,
   URL_ROUND_SOWING,
@@ -66,5 +70,7 @@ export {
   URL_LIVE_DANMU_CONFIG,
   URL_GET_USER_INFO,
   URL_USER_LOGIN,
-  URL_USER_REGISTER
+  URL_USER_REGISTER,
+  URL_SEND_VIDEO,
+  URL_GET_VIDEO_INFO
 }

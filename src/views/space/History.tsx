@@ -5,6 +5,7 @@ import { formatDate } from "../../util/datetime";
 
 import tips from "../../assets/images/nocontent.png";
 import style from "./history.styl?css-modules";
+import { getVideo } from "../../api/video";
 
 
 
@@ -54,6 +55,7 @@ interface HistoryState {
   itemIndex: number;
   histories: Array<[string, ViewHistory[]]>;
   userRole: number;
+  videoList: any;
 }
 
 class History extends React.Component<null, HistoryState> {
@@ -63,7 +65,8 @@ class History extends React.Component<null, HistoryState> {
     this.state = {
       itemIndex: 0,
       histories: [],
-      userRole: 0
+      userRole: 0,
+      videoList: []
     }
   }
   public componentDidMount() {
@@ -72,6 +75,15 @@ class History extends React.Component<null, HistoryState> {
     if (eyeUser) {
       const userData = JSON.parse(eyeUser);
       this.setState({ userRole: userData[0].role });
+
+      getVideo(userData[0].number).then((result) => {
+        console.log(JSON.stringify(result) + "####");
+        if (result.code === 0) {
+          console.log(JSON.stringify(result.data));
+          localStorage.getItem('eyeUser');
+          this.setState({ videoList: result.data })
+        }
+      });
     }
     const viewHistories = storage.getViewHistory();
     // 按点击时间降序
@@ -93,6 +105,7 @@ class History extends React.Component<null, HistoryState> {
     this.setState({
       histories: [...historyMap]  // 转换成Array [[key, value], [key, value]]
     });
+
   }
   public render() {
     const isAdmin = this.state.userRole === 2;
@@ -158,7 +171,7 @@ class History extends React.Component<null, HistoryState> {
         <div style={{ display: this.state.itemIndex === 1 ? "block" : "none" }}>
           <div className={style.tips}>
             <img src={tips} />
-            <div className={style.text}>小哔睡着了~</div>
+            <div className={style.text}>{JSON.stringify(this.state.videoList)}~</div>
           </div>
         </div>
         {isAdmin && (
