@@ -53,7 +53,7 @@ const getPubdate = (timestamp) => {
 
 interface DetailProps {
   video: Video;
-  match: match<{aId}>;
+  match: match<{ aId }>;
   history: History;
   staticContext?: { picSuffix: string };
 }
@@ -136,7 +136,7 @@ class Detail extends React.Component<DetailProps, DetailState> {
             return {
               content: item.content.message,
               date,
-              user: {...new UpUser(item.member.mid, item.member.uname, item.member.avatar)}
+              user: { ...new UpUser(item.member.mid, item.member.uname, item.member.avatar) }
             }
           });
         }
@@ -213,13 +213,13 @@ class Detail extends React.Component<DetailProps, DetailState> {
         <div className={style.contentWrapper}>
           <div className={style.videoContainer}>
             <VideoPlayer video={{
-                aId: video.aId,
-                cId: video.cId,
-                title: video.title,
-                cover: video.pic,
-                duration: video.duration,
-                url: video.url
-              }} />
+              aId: video.aId,
+              cId: video.cId,
+              title: video.title,
+              cover:  video.pic,
+              duration: video.duration,
+              url:  video.url
+            }} />
           </div>
           {/* 视频信息 */}
           <div className={style.videoInfoContainer} ref={this.infoContainerRef}>
@@ -268,7 +268,7 @@ class Detail extends React.Component<DetailProps, DetailState> {
                         {v.title}
                       </div>
                       <div className={style.upUser}>
-                        <span onClick={(e) => { e.preventDefault(); this.toSpace(v.owner.mId)}}>
+                        <span onClick={(e) => { e.preventDefault(); this.toSpace(v.owner.mId) }}>
                           {v.owner.name}
                         </span>
                       </div>
@@ -295,31 +295,31 @@ class Detail extends React.Component<DetailProps, DetailState> {
                   评论<span className={style.commentCount}>(&nbsp;{this.commentPage.count}&nbsp;)</span>
                 </div>
                 <div className={style.commentList}>
-                {
-                  this.state.comments.map((comment, i) => (
-                    <div className={style.commentWrapper}  key={i}>
-                      <Link to={"/space/" + comment.user.mId}>
-                        <LazyLoad height="2rem">
-                          <img className={style.commentUpPic} src={this.getPicUrl(comment.user.face, "@60w_60h")}
-                            alt={comment.user.name}/>
-                        </LazyLoad>
-                      </Link>
-                      <span className={style.commentTime}>{comment.date}</span>
-                      <div className={style.commentUpUser}>
+                  {
+                    this.state.comments.map((comment, i) => (
+                      <div className={style.commentWrapper} key={i}>
                         <Link to={"/space/" + comment.user.mId}>
-                          {comment.user.name}
+                          <LazyLoad height="2rem">
+                            <img className={style.commentUpPic} src={this.getPicUrl(comment.user.face, "@60w_60h")}
+                              alt={comment.user.name} />
+                          </LazyLoad>
                         </Link>
+                        <span className={style.commentTime}>{comment.date}</span>
+                        <div className={style.commentUpUser}>
+                          <Link to={"/space/" + comment.user.mId}>
+                            {comment.user.name}
+                          </Link>
+                        </div>
+                        <div className={style.commentContent}>
+                          {comment.content}
+                        </div>
                       </div>
-                      <div className={style.commentContent}>
-                        {comment.content}
-                      </div>
-                    </div>
-                  ))
-                }
+                    ))
+                  }
                 </div>
                 {
                   this.state.showLoadMore === true ? (
-                    <div className={style.loadMore} onClick={() => {this.loadMoreComment()}}>
+                    <div className={style.loadMore} onClick={() => { this.loadMoreComment() }}>
                       点击加载更多评论
                     </div>
                   ) : (

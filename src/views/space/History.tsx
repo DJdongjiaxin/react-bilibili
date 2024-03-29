@@ -174,7 +174,7 @@ class History extends React.Component<null, HistoryState> {
               <div className={style.historyItem} key={i}>
                 <div className={style.itemTitle}>{item.videoname}</div>
                     <div className={style.itemWrapper}>
-                      <a href={"/video?"+item.id}>
+                      <a href={`/video/av1052209157?videoUrl=${item.video_file}&coverUrl=${item.cover_image}`}>
                         <div className={style.imgContainer}>
                           <img src={`http://localhost:3011/${item.cover_image}`} />
                         </div>

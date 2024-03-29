@@ -17,7 +17,7 @@ interface ResultProps {
 
 interface ResultState {
   loading: boolean;
-  videos: Video[];
+  videos: any;
   upUsers: any[];
   upUserCount: number;
 }

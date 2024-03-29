@@ -33,6 +33,7 @@ interface VideoPlayerState {
   isShowControlBar: boolean;
   isShowPlayBtn: boolean;
   isLive: boolean;
+  videoUrl: any;
 }
 
 class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState> {
@@ -71,16 +72,24 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
       isShowCover: true,
       isShowControlBar: false,
       isShowPlayBtn: false,
-      isLive: props.isLive
+      isLive: props.isLive,
+      videoUrl: ""
     };
   }
   public componentDidMount() {
+    if(new URLSearchParams(window.location.search).get('videoUrl')!==null){
+      this.setState({
+        videoUrl: `http://localhost:3011/${new URLSearchParams(window.location.search).get('videoUrl')}`
+      })
+    }
+   
+    console.log(`http://localhost:3011/${new URLSearchParams(window.location.search).get('videoUrl')}` + "!!!!!!!!!!!");
     this.initVideo();
   }
   /**
    * 发射弹幕
    */
-  public sendBarrage(data: {color: string, content: string}) {
+  public sendBarrage(data: { color: string, content: string }) {
     if (this.state.barrageSwitch === true) {
       this.barrageRef.current.send({
         type: BarrageType.RANDOM,
@@ -90,7 +99,7 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
     }
   }
   private initVideo() {
-    const { live, video } = this.props; 
+    const { live, video } = this.props;
     const barrageComponent = this.barrageRef.current;
     const videoDOM = this.videoRef.current;
     const currentTimeDOM = this.currentTimeRef.current;
@@ -129,7 +138,7 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
         currentTimeDOM.innerHTML = formatDuration(videoDOM.currentTime, "0#:##");
         const progress = videoDOM.currentTime / videoDOM.duration * 100;
         progressDOM.style.width = `${progress}%`;
-  
+
         if (this.state.barrageSwitch === true) {
           const barrages = this.findBarrages(videoDOM.currentTime);
           barrages.forEach((barrage) => {
@@ -138,7 +147,7 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
           });
         }
       });
-  
+
       videoDOM.addEventListener("ended", () => {
         currentTimeDOM.innerHTML = "00:00";
         progressDOM.style.width = "0";
@@ -149,7 +158,7 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
           fullscreen: false,
           finish: true
         });
-  
+
         // 重新赋值弹幕列表
         this.barrages = this.initBarrages.slice();
         // 清除弹幕
@@ -193,11 +202,11 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
         videoDOM.currentTime = videoDOM.duration * rate;
 
         this.playOrPause();
-      });   
+      });
     } else { // 直播时处理
       if (this.props.liveTime) {
         const liveDurationDOM = this.liveDurationRef.current;
-        let liveDuration = (new Date().getTime() -  this.props.liveTime) / 1000;
+        let liveDuration = (new Date().getTime() - this.props.liveTime) / 1000;
         liveDurationDOM.innerHTML = formatDuration(liveDuration, "0#:##:##");
         setInterval(() => {
           liveDuration += 1;
@@ -405,13 +414,20 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
     const switchClass = this.state.barrageSwitch === true ? style.barrageOn : style.barrageOff;
     const wrapperClass = this.state.fullscreen === true ?
       `${style.videoPlayer} ${style.fullscreen}` : style.videoPlayer;
+    let videoUrl = "";
+    if (this.state.videoUrl !== "" && this.state.videoUrl != null) {
+      console.log(this.state.videoUrl+"######################")
+      videoUrl = this.state.videoUrl;
+    } else {
+      videoUrl = this.getVideoUrl(video.url);
+    }
     return (
       <div className={wrapperClass}>
         <video height="100%" width="100%" preload="auto"
           x5-playsinline="true"
           webkit-playsinline="true"
           playsInline={true}
-          src={live === false ? this.getVideoUrl(video.url) : ""}
+          src={live === false ? videoUrl : ""}
           style={videoStyle}
           ref={this.videoRef} />
         <div className={style.barrage}>
@@ -428,7 +444,7 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
                   <div className={style.left}>
                     <span className={style.time} ref={this.currentTimeRef}>00:00</span>
                     <span className={style.split}>/</span>
-                    <span className={style.totalDuration}>{formatDuration(this.state.duration, "0#:##")}</span>
+                    <span className={style.totalDuration}>{this.state.duration ? formatDuration(this.state.duration, "0#:##") : "--:--"}</span>
                   </div>
                   <div className={style.center}>
                     <div className={style.progressWrapper} onClick={(e) => { this.changePlayPosition(e); }}>
@@ -441,15 +457,15 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
               )
             }
             <div className={style.right}>
-               <div className={switchClass}
-                 onClick={(e) => { e.stopPropagation(); this.onOrOff(); }} />
-               <div className={style.fullscreen}
-                 onClick={(e) => { e.stopPropagation(); this.entryOrExitFullscreen(); }}/>
+              <div className={switchClass}
+                onClick={(e) => { e.stopPropagation(); this.onOrOff(); }} />
+              <div className={style.fullscreen}
+                onClick={(e) => { e.stopPropagation(); this.entryOrExitFullscreen(); }} />
             </div>
           </div>
         </div>
         <div className={style.cover} style={coverStyle}>
-          { 
+          {
             live === false ? (
               <React.Fragment>
                 <div className={style.title}>
@@ -457,7 +473,7 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
                 </div>
                 <img className={style.pic} src={video.cover} alt={video.title} />
                 <div className={style.prePlay}>
-                  <div className={style.duration}>{formatDuration(video.duration, "0#:##:##")}</div>
+                  <div className={style.duration}>{this.state.duration ? formatDuration(video.duration, "0#:##:##") : "--:--"}</div>
                   <div className={style.preview} onClick={() => { this.playOrPause(); }} />
                 </div>
               </React.Fragment>
@@ -477,7 +493,7 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
               <div className={style.wrapper}>
                 <img className={style.img} src={loading} />
                 <span className={style.text}>
-                  { live === false ? "正在缓冲" : "" }
+                  {live === false ? "正在缓冲" : ""}
                 </span>
               </div>
             </div>
@@ -489,7 +505,7 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
               <img className={style.coverPic} src={video.cover} alt={video.title} />
               <div className={style.coverWrapper}>
                 <div className={style.replay} onClick={() => { this.playOrPause(); }}>
-                  <i className={style.replayIcon}/>
+                  <i className={style.replayIcon} />
                   <span>重新播放</span>
                 </div>
               </div>
