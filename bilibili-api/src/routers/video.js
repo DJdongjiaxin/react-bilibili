@@ -164,4 +164,33 @@ router.get('/video/getVideo', async (req, res, next) => {
   }
   dbConfig.sqlConnect(sql1, sqlArr1, callBack1);
 });
+
+/**
+ *  搜索视频接口
+ */
+router.get('/video/search', async (req, res, next) => {
+  let { keyword } = req.query;
+
+  if (!keyword) {
+    return res.status(400).json({ error: 'Keyword is required' });
+  }
+
+  var sql1 = "SELECT * FROM videos WHERE videoname LIKE ? OR description LIKE ?";
+  var sqlArr1 = [`%${keyword}%`, `%${keyword}%`];
+  let code = 0;
+  let msg = '搜索视频成功';
+  var callBack1 = (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'An error occurred while searching for videos' });
+    } else {
+      res.send({
+        'code': code,
+        'msg': msg,
+        'data': data
+      });
+    }
+  }
+  dbConfig.sqlConnect(sql1, sqlArr1, callBack1);
+});
 module.exports = router;

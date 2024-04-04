@@ -6,6 +6,7 @@ import { Video, UpUser, createVideoBySearch } from "../../models";
 import { formatTenThousand, formatDuration } from "../../util/string";
 import { getPicSuffix } from "../../util/image";
 import Context from "../../context";
+import { searchVideo } from "../../api/video";
 
 import tips from "../../assets/images/tips.png";
 import style from "./result.styl?css-modules";
@@ -92,18 +93,18 @@ class Result extends React.Component<ResultProps, ResultState> {
           videos = result.data.result.map((item) => createVideoBySearch(item));
         } else {  // up主
           upUsers = result.data.result.map((item) => ({
-              videoCount: item.videos,
-              ...new UpUser(
-                item.mid,
-                item.uname,
-                item.upic,
-                item.level,
-                "",
-                item.usign,
-                0,
-                item.fans
-              )
-            })
+            videoCount: item.videos,
+            ...new UpUser(
+              item.mid,
+              item.uname,
+              item.upic,
+              item.level,
+              "",
+              item.usign,
+              0,
+              item.fans
+            )
+          })
           );
         }
 
@@ -115,6 +116,14 @@ class Result extends React.Component<ResultProps, ResultState> {
         })
       }
     })
+    searchVideo(this.props.keyword).then((result) => {
+      console.log(result);
+      this.setState({
+        loading: false,
+        videos: this.state.videos.concat(result.data)
+      })
+    });
+
   }
   private changeSearchType(searchType: SearchType) {
     if (this.searchType !== searchType) {
@@ -154,14 +163,14 @@ class Result extends React.Component<ResultProps, ResultState> {
         <div className={style.tabContainer}>
           <div className={style.tabItem}>
             <div className={style.item + (this.searchType === SearchType.ALL ? " " + style.current : "")}
-              onClick={() => {this.changeSearchType(SearchType.ALL)}}>综合</div>
+              onClick={() => { this.changeSearchType(SearchType.ALL) }}>综合</div>
           </div>
           <div className={style.tabItem}>
             <div className={style.item + (this.searchType === SearchType.UPUSER ? " " + style.current : "")}
-              onClick={() => {this.changeSearchType(SearchType.UPUSER)}}>UP主{
+              onClick={() => { this.changeSearchType(SearchType.UPUSER) }}>UP主{
                 this.state.upUserCount > 0 ? (
                   this.state.upUserCount > 100 ? ("(99+)") :
-                  `(${this.state.upUserCount})`
+                    `(${this.state.upUserCount})`
                 ) : ""
               }</div>
           </div>
@@ -171,13 +180,13 @@ class Result extends React.Component<ResultProps, ResultState> {
             <div className={style.resultWrapper}>
               <div className={style.subTab}>
                 <div className={style.sort + (this.orderType === OrderType.TOTALRANK ? " " + style.current : "")}
-                  onClick={() => {this.changeOrderType(OrderType.TOTALRANK)}}>默认排序</div>
+                  onClick={() => { this.changeOrderType(OrderType.TOTALRANK) }}>默认排序</div>
                 <div className={style.sort + (this.orderType === OrderType.CLICK ? " " + style.current : "")}
-                  onClick={() => {this.changeOrderType(OrderType.CLICK)}}>播放多</div>
+                  onClick={() => { this.changeOrderType(OrderType.CLICK) }}>播放多</div>
                 <div className={style.sort + (this.orderType === OrderType.PUBDATA ? " " + style.current : "")}
-                  onClick={() => {this.changeOrderType(OrderType.PUBDATA)}}>新发布</div>
+                  onClick={() => { this.changeOrderType(OrderType.PUBDATA) }}>新发布</div>
                 <div className={style.sort + (this.orderType === OrderType.DM ? " " + style.current : "")}
-                  onClick={() => {this.changeOrderType(OrderType.DM)}}>弹幕多</div>
+                  onClick={() => { this.changeOrderType(OrderType.DM) }}>弹幕多</div>
               </div>
               <div className={style.videoList}>
                 {
@@ -185,27 +194,37 @@ class Result extends React.Component<ResultProps, ResultState> {
                     <div className={style.videoWrapper} key={video.aId + i + ""}>
                       <a href={"/video/av" + video.aId}>
                         <div className={style.imageContainer}>
-                            <LazyLoad height={"3.654rem"}>
-                              <img src={this.getPicUrl("https:" + video.pic, "@200w_125h")} alt={video.title} />
-                            </LazyLoad>
-                            <div className={style.duration}>{formatDuration(video.duration, "0#:##:##")}</div>
+                          <LazyLoad height={"3.654rem"}>
+                            <img src={video.cover_image ? `http://localhost:3011/${video.cover_image}` : this.getPicUrl("https:" + video.pic, "@200w_125h")} alt={video.title || video.videoname} />
+                          </LazyLoad>
+                          <div className={style.duration}>{video.duration ? formatDuration(video.duration, "0#:##:##") : "--:--"}</div>
                         </div>
                         <div className={style.infoWrapper}>
-                          <p dangerouslySetInnerHTML={{__html: video.title}}/>
-                          <div className={style.ownerWrapper}>
-                            <span className={style.iconUp}/>
-                            <span className={style.owner}>{video.owner.name}</span>
-                          </div>
-                          <div className={style.countInfo}>
-                            <span className={style.iconPlay} />
-                            <span className={style.playCount}>
-                              {formatTenThousand(video.playCount)}
-                            </span>
-                            <span className={style.iconBarrage} />
-                            <span className={style.barrageCount}>
-                              {formatTenThousand(video.barrageCount)}
-                            </span>
-                          </div>
+                          <span>{video.videoname}</span>
+                          <p dangerouslySetInnerHTML={{ __html: video.description }} />
+                          {
+                            video.owner && (
+                              <div className={style.ownerWrapper}>
+                                <span className={style.iconUp} />
+                                <span className={style.owner}>{video.owner.name}</span>
+                              </div>
+                            )
+                          }
+                          {
+                            video.playCount && video.barrageCount && (
+                              <div className={style.countInfo}>
+                                <span className={style.iconPlay} />
+                                <span className={style.playCount}>
+                                  {formatTenThousand(video.playCount)}
+                                </span>
+                                <span className={style.iconBarrage} />
+                                <span className={style.barrageCount}>
+                                  {formatTenThousand(video.barrageCount)}
+                                </span>
+                              </div>
+                            )
+                          }
+
                         </div>
                       </a>
                     </div>
@@ -241,10 +260,10 @@ class Result extends React.Component<ResultProps, ResultState> {
         }
         {
           this.page.pageNumber >= 5 ? (
-          <div className={style.tips}>
-            <img src={tips} />
-            <span className={style.text}>刷到底了哟，从头再来吧 ~</span>
-          </div>
+            <div className={style.tips}>
+              <img src={tips} />
+              <span className={style.text}>刷到底了哟，从头再来吧 ~</span>
+            </div>
           ) : null
         }
         {

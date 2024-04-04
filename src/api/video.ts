@@ -6,7 +6,8 @@ import {
   URL_VIDEO_REPLAY,
   URL_VIDEO_BARRAG,
   URL_SEND_VIDEO,
-  URL_GET_VIDEO_INFO
+  URL_GET_VIDEO_INFO,
+  URL_SEARCH_VIDEO
 } from "./url";
 
 /**
@@ -49,4 +50,11 @@ export function getBarrages(cId: number) {
  */
 export function getVideo(number) {
   return getJSON(URL_GET_VIDEO_INFO, { number });
+}
+
+/**
+ * 搜索视频
+ */
+export function searchVideo(keyword) {
+  return getJSON(URL_SEARCH_VIDEO, { keyword });
 }
