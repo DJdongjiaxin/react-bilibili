@@ -12,13 +12,14 @@ const VideoUploadForm = () => {
     React.useEffect(() => {
         // setUserData(JSON.parse(localStorage.getItem('eyeUser'))[0].number);
 
-        
+
     }, [])
     const getResult = () => {
         const formData = new FormData();
         formData.append("videoName", videoName);
         formData.append("videoDescription", videoDescription);
-        formData.append("number", JSON.parse(localStorage.getItem('eyeUser'))[0].number)
+        formData.append("username", JSON.parse(localStorage.getItem('eyeUser'))[0].username)
+        formData.append("uid", JSON.parse(localStorage.getItem('eyeUser'))[0].id)
         if (coverImage) {
             formData.append("coverImage", coverImageRef.current, coverImage.name);
         }

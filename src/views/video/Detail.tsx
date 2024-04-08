@@ -9,7 +9,7 @@ import Context from "../../context";
 import VideoPlayer from "./VideoPlayer";
 import { Video, createVideo, UpUser } from "../../models";
 import { formatTenThousand, formatDuration } from "../../util/string";
-import { getRecommendVides, getComments } from "../../api/video";
+import { getRecommendVides, getComments, videoInfo } from "../../api/video";
 import { getPicSuffix } from "../../util/image";
 import { formatDate } from "../../util/datetime";
 import storage from "../../util/storage";
@@ -63,6 +63,7 @@ interface DetailState {
   recommendVides: Video[];
   showLoadMore: boolean;
   comments: any;
+  videoInfo: any;
 }
 
 class Detail extends React.Component<DetailProps, DetailState> {
@@ -88,21 +89,39 @@ class Detail extends React.Component<DetailProps, DetailState> {
       loading: true,
       recommendVides: [],
       showLoadMore: true,
-      comments: []
+      comments: [],
+      videoInfo: null
     }
   }
   public componentDidMount() {
-    this.getRecommentVides();
-    this.getComments();
-
     // 记录当前视频信息
     const { video } = this.props;
-    storage.setViewHistory({
-      aId: video.aId,
-      title: video.title,
-      pic: video.pic,
-      viewAt: new Date().getTime()
-    });
+    if (new URLSearchParams(window.location.search).get('vid') !== null) {
+      videoInfo(new URLSearchParams(window.location.search).get('vid')).then((result) => {
+        console.log(JSON.stringify(result) + "####");
+        if (result.code === 0) {
+          console.log(JSON.stringify(result.data));
+          this.setState({
+            videoInfo: result.data
+          })
+        }
+      });
+      // this.setState({
+      //   videoUrl: `http://localhost:3011/${new URLSearchParams(window.location.search).get('videoUrl')}`
+      // })
+    } else {
+      storage.setViewHistory({
+        aId: video.aId,
+        title: video.title,
+        pic: video.pic,
+        viewAt: new Date().getTime()
+      });
+      this.getComments();
+    }
+    this.getRecommentVides();
+
+
+
   }
   private getRecommentVides() {
     getRecommendVides(this.props.match.params.aId).then((result) => {
@@ -216,9 +235,9 @@ class Detail extends React.Component<DetailProps, DetailState> {
               aId: video.aId,
               cId: video.cId,
               title: video.title,
-              cover:  video.pic,
+              cover: this.state.videoInfo ? `http://localhost:3011/${this.state.videoInfo.cover_image}` : video.pic,
               duration: video.duration,
-              url:  video.url
+              url: video.url
             }} />
           </div>
           {/* 视频信息 */}
@@ -227,15 +246,15 @@ class Detail extends React.Component<DetailProps, DetailState> {
               onClick={this.toggle} />
             <div className={style.infoWrapper} ref={this.infoRef}>
               <div className={style.title}>
-                {video.title}
+                {this.state.videoInfo ? this.state.videoInfo.videoname : video.title}
               </div>
               <div className={style.videoInfo}>
                 <Link to={"/space/" + video.owner.mId}>
-                  <span className={style.upUserName}>{video.owner.name}</span>
+                  <span className={style.upUserName}>{this.state.videoInfo ? this.state.videoInfo.username : video.owner.name}</span>
                 </Link>
                 <span className={style.play}>{formatTenThousand(video.playCount)}次观看</span>
                 <span>{formatTenThousand(video.barrageCount)}弹幕</span>
-                <span>{getPubdate(video.publicDate)}</span>
+                <span>{this.state.videoInfo ? this.state.videoInfo.date : getPubdate(video.publicDate)}</span>
               </div>
               <div className={style.desc}>
                 {video.desc}

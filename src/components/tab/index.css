@@ -21,14 +21,14 @@
   background-size: 100% 100%;
 }
 
-.tabbar_btn:after {
+/* .tabbar_btn:after {
   content: "";
   position: absolute;
   left: -4rem;
   right: -4rem;
   top: -2rem;
   bottom: -2rem;
-}
+} */
 
 .tabbar_btn.home {
   background-image: url(../../assets/images/tabbar_home.png);

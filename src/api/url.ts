@@ -45,6 +45,8 @@ const URL_SEND_VIDEO = prefix + "/video/send";
 const URL_GET_VIDEO_INFO = prefix + "/video/getVideo";
 // 搜索视频
 const URL_SEARCH_VIDEO = prefix + "/video/search";
+// 查询视频详情信息
+const URL_VIDEO_INFO = prefix + "/video/info";
 export {
   URL_INDEX,
   URL_ROUND_SOWING,
@@ -75,5 +77,6 @@ export {
   URL_USER_REGISTER,
   URL_SEND_VIDEO,
   URL_GET_VIDEO_INFO,
-  URL_SEARCH_VIDEO
+  URL_SEARCH_VIDEO,
+  URL_VIDEO_INFO
 }

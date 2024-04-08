@@ -34,6 +34,7 @@ interface VideoPlayerState {
   isShowPlayBtn: boolean;
   isLive: boolean;
   videoUrl: any;
+  barrageText: string;
 }
 
 class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState> {
@@ -73,16 +74,17 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
       isShowControlBar: false,
       isShowPlayBtn: false,
       isLive: props.isLive,
-      videoUrl: ""
+      videoUrl: "",
+      barrageText: ""
     };
   }
   public componentDidMount() {
-    if(new URLSearchParams(window.location.search).get('videoUrl')!==null){
+    if (new URLSearchParams(window.location.search).get('videoUrl') !== null) {
       this.setState({
         videoUrl: `http://localhost:3011/${new URLSearchParams(window.location.search).get('videoUrl')}`
       })
     }
-   
+
     console.log(`http://localhost:3011/${new URLSearchParams(window.location.search).get('videoUrl')}` + "!!!!!!!!!!!");
     this.initVideo();
   }
@@ -416,7 +418,7 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
       `${style.videoPlayer} ${style.fullscreen}` : style.videoPlayer;
     let videoUrl = "";
     if (this.state.videoUrl !== "" && this.state.videoUrl != null) {
-      console.log(this.state.videoUrl+"######################")
+      console.log(this.state.videoUrl + "######################")
       videoUrl = this.state.videoUrl;
     } else {
       videoUrl = this.getVideoUrl(video.url);
@@ -432,10 +434,25 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
           ref={this.videoRef} />
         <div className={style.barrage}>
           <Barrage opacity={live === false ? 0.75 : 1} ref={this.barrageRef} />
+          <form>
+            <input
+              type="text"
+              placeholder="输入弹幕"
+              onChange={(e) => {
+                this.setState({
+                  barrageText: e.target.value
+                });
+              }}
+            />
+            <div onClick={()=>{
+                  this.sendBarrage({ color: "#fff", content: this.state.barrageText })
+            }}>发送</div>
+          </form>
         </div>
         <div className={style.controls} onClick={() => { this.showOrHideControls(); }}>
           <div className={style.playButton + " " + playBtnClass} style={playBtnStyle}
             onClick={(e) => { e.stopPropagation(); this.playOrPause(); }} />
+
           <div className={style.controlBar + (live === true ? " " + style.liveControl : "")}
             style={controlBarStyle}>
             {

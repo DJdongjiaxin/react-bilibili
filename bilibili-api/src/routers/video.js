@@ -126,13 +126,15 @@ router.get("/av/barrage/:cId", (req, res, next) => {
 });
 // 上传视频和图片的接口
 router.post("/video/send", upload.fields([{ name: "coverImage" }, { name: "videoFile" }]), (req, res) => {
-  const { videoName, videoDescription, number } = req.body;
+  const { videoName, videoDescription, username,uid} = req.body;
   const { coverImage, videoFile } = req.files;
-  var sql = "INSERT INTO videos (videoname, description, cover_image, video_file,user_number) VALUES (?, ?, ?, ?, ?)";
-  var sqlArr = [videoName, videoDescription, coverImage[0].path, videoFile[0].path, number];
+  const timestamp = Date.now(); // 获取当前时间戳
+  const date = new Date(timestamp).toISOString().slice(0, 19).replace('T', ' '); // 将时间戳转换为有效的日期和时间字符串
+  var sql = "INSERT INTO videos (videoname, description, cover_image, video_file,username,date,uid) VALUES (?, ?, ?, ?, ?, ?, ?)";
+  var sqlArr = [videoName, videoDescription, coverImage[0].path, videoFile[0].path, username, date,uid];
   var callBack = (err, data) => {
     if (err) {
-      console.log("error!!!!!");
+      console.log("error!!!!!"+err);
     } else {
       res.send({
         'list': data
@@ -143,11 +145,11 @@ router.post("/video/send", upload.fields([{ name: "coverImage" }, { name: "video
 });
 
 /**
- * 查询投稿视频接口
+ * 查询投稿视频接口(依照用户id)
  */
 router.get('/video/getVideo', async (req, res, next) => {
   let { number } = req.query;
-  var sql1 = "select * from videos where user_number=?";
+  var sql1 = "select * from videos where uid=?";
   var sqlArr1 = [number];
   let code = 0;
   let msg = '查询用户投稿视频成功';
@@ -189,6 +191,27 @@ router.get('/video/search', async (req, res, next) => {
         'msg': msg,
         'data': data
       });
+    }
+  }
+  dbConfig.sqlConnect(sql1, sqlArr1, callBack1);
+});
+
+/**
+ *  查询video具体信息
+ */
+router.get('/video/info', async (req, res, next) => {
+  let { vid } = req.query;
+  var sql1 = "select * from videos where id=?";
+  var sqlArr1 = [vid];
+  let code = 0;
+  let msg = '查询视频详情信息成功';
+  var callBack1 = (err, data) => {
+    if (data && data.length > 0) {
+      res.send({
+        'code': code,
+        'msg': msg,
+        'data': data[0]
+      })
     }
   }
   dbConfig.sqlConnect(sql1, sqlArr1, callBack1);

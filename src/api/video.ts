@@ -7,7 +7,8 @@ import {
   URL_VIDEO_BARRAG,
   URL_SEND_VIDEO,
   URL_GET_VIDEO_INFO,
-  URL_SEARCH_VIDEO
+  URL_SEARCH_VIDEO,
+  URL_VIDEO_INFO
 } from "./url";
 
 /**
@@ -57,4 +58,11 @@ export function getVideo(number) {
  */
 export function searchVideo(keyword) {
   return getJSON(URL_SEARCH_VIDEO, { keyword });
+}
+
+/**
+ * 查询视频详情信息
+ */
+export function videoInfo(vid) {
+  return getJSON(URL_VIDEO_INFO, { vid });
 }

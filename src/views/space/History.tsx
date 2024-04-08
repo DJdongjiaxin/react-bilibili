@@ -76,7 +76,7 @@ class History extends React.Component<null, HistoryState> {
       const userData = JSON.parse(eyeUser);
       this.setState({ userRole: userData[0].role });
 
-      getVideo(userData[0].number).then((result) => {
+      getVideo(userData[0].id).then((result) => {
         console.log(JSON.stringify(result) + "####");
         if (result.code === 0) {
           console.log(JSON.stringify(result.data));
@@ -174,7 +174,7 @@ class History extends React.Component<null, HistoryState> {
               <div className={style.historyItem} key={i}>
                 <div className={style.itemTitle}>{item.videoname}</div>
                     <div className={style.itemWrapper}>
-                      <a href={`/video/av1052209157?videoUrl=${item.video_file}&coverUrl=${item.cover_image}`}>
+                      <a href={`/video/av1052209157?videoUrl=${item.video_file}&coverUrl=${item.cover_image}&vid=${item.id}`}>
                         <div className={style.imgContainer}>
                           <img src={`http://localhost:3011/${item.cover_image}`} />
                         </div>
