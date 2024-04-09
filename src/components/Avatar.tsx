@@ -1,6 +1,22 @@
 import * as React from "react";
 
 const Avatar = () => {
+  const [avatarUrl, setAvatar] = React.useState("");
+  React.useEffect(() => {
+    const eyeUser = localStorage.getItem('eyeUser');
+    if (eyeUser) {
+      setAvatar(JSON.parse(localStorage.getItem('eyeUser'))[0].avatar);
+    }
+  }, [])
+  if (avatarUrl) {
+    return (
+      <img src={`http://localhost:3011/${avatarUrl}`} alt="" style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+      }}/>
+    )
+  }
   return (
     <svg data-name="\u56FE\u5C42 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
       <title>default avatar</title>
