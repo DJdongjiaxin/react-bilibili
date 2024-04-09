@@ -19,6 +19,7 @@ class App extends React.Component {
             <meta name="description" content="高仿Bilibili" />
           </Helmet>
           <Tabbar onClick={console.log('')}></Tabbar>
+         
           <Switch>
             {
               router.map((route, i) =>

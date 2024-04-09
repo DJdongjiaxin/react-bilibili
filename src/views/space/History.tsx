@@ -173,17 +173,17 @@ class History extends React.Component<null, HistoryState> {
             this.state.videoList.map((item, i) => (
               <div className={style.historyItem} key={i}>
                 <div className={style.itemTitle}>{item.videoname}</div>
-                    <div className={style.itemWrapper}>
-                      <a href={`/video/av1052209157?videoUrl=${item.video_file}&coverUrl=${item.cover_image}&vid=${item.id}`}>
-                        <div className={style.imgContainer}>
-                          <img src={`http://localhost:3011/${item.cover_image}`} />
-                        </div>
-                        <div className={style.info}>
-                          <div className={style.title}>{item.description}</div>
-                          {/* <div className={style.time}>{getTime(history.viewAt)}</div> */}
-                        </div>
-                      </a>
+                <div className={style.itemWrapper}>
+                  <a href={`/video/av1052209157?videoUrl=${item.video_file}&coverUrl=${item.cover_image}&vid=${item.id}`}>
+                    <div className={style.imgContainer}>
+                      <img src={`http://localhost:3011/${item.cover_image}`} />
                     </div>
+                    <div className={style.info}>
+                      <div className={style.title}>{item.description}</div>
+                      {/* <div className={style.time}>{getTime(history.viewAt)}</div> */}
+                    </div>
+                  </a>
+                </div>
               </div>
             ))
           }
@@ -195,7 +195,7 @@ class History extends React.Component<null, HistoryState> {
               </div>
             ) : null
           }
-
+          <div style={{ height: "3.5rem" }}></div> {/* Add this div */}
         </div>
         {isAdmin && (
           <div

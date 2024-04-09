@@ -8,7 +8,8 @@ import {
   URL_SEND_VIDEO,
   URL_GET_VIDEO_INFO,
   URL_SEARCH_VIDEO,
-  URL_VIDEO_INFO
+  URL_VIDEO_INFO,
+  URL_GET_ALL_COMMENTS
 } from "./url";
 
 /**
@@ -65,4 +66,11 @@ export function searchVideo(keyword) {
  */
 export function videoInfo(vid) {
   return getJSON(URL_VIDEO_INFO, { vid });
+}
+
+/**
+ * 查询当前视频的所有评论
+ */
+export function getAllComments(vid) {
+  return getJSON(URL_GET_ALL_COMMENTS, { vid });
 }

@@ -9,7 +9,7 @@ import Context from "../../context";
 import VideoPlayer from "./VideoPlayer";
 import { Video, createVideo, UpUser } from "../../models";
 import { formatTenThousand, formatDuration } from "../../util/string";
-import { getRecommendVides, getComments, videoInfo } from "../../api/video";
+import { getRecommendVides, getComments, videoInfo, getAllComments } from "../../api/video";
 import { getPicSuffix } from "../../util/image";
 import { formatDate } from "../../util/datetime";
 import storage from "../../util/storage";
@@ -117,7 +117,9 @@ class Detail extends React.Component<DetailProps, DetailState> {
         viewAt: new Date().getTime()
       });
       this.getComments();
+
     }
+    this.getAllComments();
     this.getRecommentVides();
 
 
@@ -130,6 +132,18 @@ class Detail extends React.Component<DetailProps, DetailState> {
         this.setState({
           loading: false,
           recommendVides
+        });
+      }
+    });
+  }
+  private getAllComments() {
+    getAllComments(new URLSearchParams(window.location.search).get('vid')).then((result) => {
+      console.log(JSON.stringify(result.data) + "##@@@@@@@@@@@@@@@@@@@");
+      if (result.code === 0) {
+        console.log(JSON.stringify(result.data) + "##@@@@@@@@@@@@@@@@@@@");
+        this.setState({
+          showLoadMore: true,
+          comments: result.data
         });
       }
     });
@@ -216,6 +230,7 @@ class Detail extends React.Component<DetailProps, DetailState> {
     if (video.pic.indexOf("@400w_300h") === -1) {
       video.pic = this.getPicUrl(video.pic, "@400w_300h");
     }
+
 
     return (
       <div className="video-detail">
@@ -309,45 +324,55 @@ class Detail extends React.Component<DetailProps, DetailState> {
           </div>
           {
             this.state.comments.length > 0 ? (
-              <div className={style.comment}>
-                <div className={style.commentTitle}>
-                  评论<span className={style.commentCount}>(&nbsp;{this.commentPage.count}&nbsp;)</span>
-                </div>
-                <div className={style.commentList}>
-                  {
-                    this.state.comments.map((comment, i) => (
-                      <div className={style.commentWrapper} key={i}>
-                        <Link to={"/space/" + comment.user.mId}>
-                          <LazyLoad height="2rem">
-                            <img className={style.commentUpPic} src={this.getPicUrl(comment.user.face, "@60w_60h")}
-                              alt={comment.user.name} />
-                          </LazyLoad>
-                        </Link>
-                        <span className={style.commentTime}>{comment.date}</span>
-                        <div className={style.commentUpUser}>
-                          <Link to={"/space/" + comment.user.mId}>
-                            {comment.user.name}
+              <>
+                <div className={style.comment}>
+                  <div className={style.commentTitle}>
+                    评论<span className={style.commentCount}>(&nbsp;{this.state.comments.length}&nbsp;)</span>
+                  </div>
+                  <div className={style.commentList}>
+                    {
+                      this.state.comments.map((comment) => (
+                        <div className={style.commentWrapper} key={comment.cid}>
+                          <Link to={"/space/"}>
+                            <LazyLoad height="2rem">
+                              {/* {
+                                comment.user.avatar ? (
+                                  <img src="" alt="" />
+                                ) : (
+                                  <img className={style.commentUpPic} src={comment.user.avatar ? comment.user.avatar : this.getPicUrl(comment.user.face, "@60w_60h")}
+                                    alt={comment.user.username || comment.user.name} />
+                                )
+                              } */}
+                              <img src="" alt="" />
+                            </LazyLoad>
                           </Link>
+                          <span className={style.commentTime}>{comment.date}</span>
+                          <div className={style.commentUpUser}>
+                            <Link to={"/space/" + comment.user.mId}>
+                              {comment.user.username || comment.user.name}
+                            </Link>
+                          </div>
+                          <div className={style.commentContent}>
+                            {comment.content}
+                          </div>
                         </div>
-                        <div className={style.commentContent}>
-                          {comment.content}
-                        </div>
+                      ))
+                    }
+                  </div>
+                  {
+                    this.state.showLoadMore === true ? (
+                      <div className={style.loadMore} onClick={() => { this.loadMoreComment() }}>
+                        点击加载更多评论
                       </div>
-                    ))
+                    ) : (
+                      <div className={style.noMore}>
+                        没有更多了 ~
+                      </div>
+                    )
                   }
                 </div>
-                {
-                  this.state.showLoadMore === true ? (
-                    <div className={style.loadMore} onClick={() => { this.loadMoreComment() }}>
-                      点击加载更多评论
-                    </div>
-                  ) : (
-                    <div className={style.noMore}>
-                      没有更多了 ~
-                    </div>
-                  )
-                }
-              </div>
+                <div style={{ height: "3.5rem" }}></div> {/* Add this div */}
+              </>
             ) : null
           }
         </div>

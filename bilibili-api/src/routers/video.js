@@ -216,4 +216,49 @@ router.get('/video/info', async (req, res, next) => {
   }
   dbConfig.sqlConnect(sql1, sqlArr1, callBack1);
 });
+
+/**
+ *  获取当前video的所有评论
+ */
+router.get('/video/commends', async (req, res, next) => {
+  let { vid } = req.query;
+  var sql1 = "select * from comments where vid=?";
+  var sqlArr1 = [vid];
+  let code = 0;
+  let msg = '查询评论列表成功';
+  var callBack1 = async (err, data) => {
+    if (data && data.length > 0) {
+      // 使用Promise.all同时查询所有用户信息
+      const userInfoPromises = data.map(comment => {
+        let uid = comment.uid;
+        var sql2 = "select * from user where id=?";
+        var sqlArr2 = [uid];
+        return new Promise((resolve, reject) => {
+          dbConfig.sqlConnect(sql2, sqlArr2, (err, userInfo) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(userInfo[0]);
+            }
+          });
+        });
+      });
+
+      try {
+        const userInfos = await Promise.all(userInfoPromises);
+        data.forEach((comment, index) => {
+          comment.user = userInfos[index]; // 将用户信息添加到评论对象中
+        });
+        res.send({
+          'code': code,
+          'msg': msg,
+          'data': data
+        });
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    }
+  }
+  dbConfig.sqlConnect(sql1, sqlArr1, callBack1);
+});
 module.exports = router;
