@@ -1,7 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const dbConfig = require('../dbconfig');
-
+const multer = require('multer')
+// 配置 multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
 /**
  * 用户登录接口
  */
@@ -126,5 +136,32 @@ router.get('/user/searchByUsername', async (req, res, next) => {
   dbConfig.sqlConnect(sql, sqlArr, callBack)
 });
 
+router.post("/user/uploadInfo", upload.fields([{ name: "avatar" }]), (req, res) => {
+  const { username, signature, uid } = req.body;
+  const { avatar } = req.files;
 
+  // 构建动态的SQL语句，根据是否存在avatar决定是否更新avatar字段
+  let sql = "UPDATE user SET username=?, signature=?";
+  let sqlArr = [username, signature];
+
+  if (avatar) {
+    sql += ", avatar=?";
+    sqlArr.push(avatar[0].path);
+  }
+
+  sql += " WHERE id=?";
+  sqlArr.push(uid);
+
+  var callBack = (err, data) => {
+    if (err) {
+      console.log("error!!!!!" + err);
+    } else {
+      res.send({
+        'list': data
+      })
+    }
+  }
+
+  dbConfig.sqlConnect(sql, sqlArr, callBack)
+});
 module.exports = router;

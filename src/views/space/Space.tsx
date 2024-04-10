@@ -13,6 +13,10 @@ const Space = (props) => {
       window.location.href = '/login';
     }
   }, [])
+  const unLogin = () => {
+    localStorage.removeItem('eyeUser');
+    window.location.reload();
+  }
   return (
     <div className="space">
       <div className={style.topWrapper}>
@@ -21,8 +25,8 @@ const Space = (props) => {
       <div className={style.banner}>
         <img src={banner} />
         <div>
-          <span>编辑信息</span>
-          <span>退出登录</span>
+          <span onClick={()=>{  window.location.href = '/editInfo';}}>编辑信息</span>
+          <span onClick={unLogin}>退出登录</span>
           <span>平台反馈</span>
         </div>
       </div>
