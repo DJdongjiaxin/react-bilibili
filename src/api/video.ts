@@ -9,7 +9,8 @@ import {
   URL_GET_VIDEO_INFO,
   URL_SEARCH_VIDEO,
   URL_VIDEO_INFO,
-  URL_GET_ALL_COMMENTS
+  URL_GET_ALL_COMMENTS,
+  URL_ADD_COMMENT
 } from "./url";
 
 /**
@@ -73,4 +74,11 @@ export function videoInfo(vid) {
  */
 export function getAllComments(vid) {
   return getJSON(URL_GET_ALL_COMMENTS, { vid });
+}
+
+/**
+ * 新增评论
+ */
+export function addComment(vid, uid, content) {
+  return getJSON(URL_ADD_COMMENT, { vid, uid, content });
 }

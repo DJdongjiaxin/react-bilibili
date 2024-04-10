@@ -49,6 +49,8 @@ const URL_SEARCH_VIDEO = prefix + "/video/search";
 const URL_VIDEO_INFO = prefix + "/video/info";
 // 获取当前视频的所有评论
 const URL_GET_ALL_COMMENTS = prefix + "/video/commends";
+// 增加评论
+const URL_ADD_COMMENT = prefix + "/video/addCommend";
 export {
   URL_INDEX,
   URL_ROUND_SOWING,
@@ -81,5 +83,6 @@ export {
   URL_GET_VIDEO_INFO,
   URL_SEARCH_VIDEO,
   URL_VIDEO_INFO,
-  URL_GET_ALL_COMMENTS
+  URL_GET_ALL_COMMENTS,
+  URL_ADD_COMMENT
 }

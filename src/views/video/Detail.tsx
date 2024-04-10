@@ -9,7 +9,7 @@ import Context from "../../context";
 import VideoPlayer from "./VideoPlayer";
 import { Video, createVideo, UpUser } from "../../models";
 import { formatTenThousand, formatDuration } from "../../util/string";
-import { getRecommendVides, getComments, videoInfo, getAllComments } from "../../api/video";
+import { getRecommendVides, getComments, videoInfo, getAllComments, addComment } from "../../api/video";
 import { getPicSuffix } from "../../util/image";
 import { formatDate } from "../../util/datetime";
 import storage from "../../util/storage";
@@ -64,6 +64,7 @@ interface DetailState {
   showLoadMore: boolean;
   comments: any;
   videoInfo: any;
+  commentText: string;
 }
 
 class Detail extends React.Component<DetailProps, DetailState> {
@@ -90,7 +91,8 @@ class Detail extends React.Component<DetailProps, DetailState> {
       recommendVides: [],
       showLoadMore: true,
       comments: [],
-      videoInfo: null
+      videoInfo: null,
+      commentText: ""
     }
   }
   public componentDidMount() {
@@ -136,11 +138,29 @@ class Detail extends React.Component<DetailProps, DetailState> {
       }
     });
   }
+  private addComment(content) {
+    addComment(new URLSearchParams(window.location.search).get('vid'), JSON.parse(localStorage.getItem('eyeUser'))[0].id, content).then((result) => {
+      if (result.code === 0) {
+        this.setState({
+          comments: this.state.comments.concat({
+            vid: new URLSearchParams(window.location.search).get('vid'),
+            uid: JSON.parse(localStorage.getItem('eyeUser'))[0].id,
+            content,
+            date: "2023-07-09T05:57:09.000Z",
+            user: {
+              id: JSON.parse(localStorage.getItem('eyeUser'))[0].id,
+              username: JSON.parse(localStorage.getItem('eyeUser'))[0].username,
+              number: JSON.parse(localStorage.getItem('eyeUser'))[0].number,
+              avatar: JSON.parse(localStorage.getItem('eyeUser'))[0].avatar
+            }
+          })
+        });
+      }
+    });
+  }
   private getAllComments() {
     getAllComments(new URLSearchParams(window.location.search).get('vid')).then((result) => {
-      console.log(JSON.stringify(result.data) + "##@@@@@@@@@@@@@@@@@@@");
       if (result.code === 0) {
-        console.log(JSON.stringify(result.data) + "##@@@@@@@@@@@@@@@@@@@");
         this.setState({
           showLoadMore: true,
           comments: result.data
@@ -151,7 +171,6 @@ class Detail extends React.Component<DetailProps, DetailState> {
   private getComments() {
     getComments(this.props.match.params.aId, this.commentPage.pageNumber).then((result) => {
       if (result.code === "1") {
-
         const page = result.data.page;
         const maxPage = Math.ceil(page.count / page.size);
         const showLoadMore = this.commentPage.pageNumber < maxPage ? true : false;
@@ -329,6 +348,20 @@ class Detail extends React.Component<DetailProps, DetailState> {
                   <div className={style.commentTitle}>
                     评论<span className={style.commentCount}>(&nbsp;{this.state.comments.length}&nbsp;)</span>
                   </div>
+                  <form>
+                    <input
+                      type="text"
+                      placeholder="输入评论"
+                      onChange={(e) => {
+                        this.setState({
+                          commentText: e.target.value
+                        });
+                      }}
+                    />
+                    <div onClick={() => {
+                      this.addComment(this.state.commentText)
+                    }}>发送</div>
+                  </form>
                   <div className={style.commentList}>
                     {
                       this.state.comments.map((comment) => (

@@ -126,15 +126,15 @@ router.get("/av/barrage/:cId", (req, res, next) => {
 });
 // 上传视频和图片的接口
 router.post("/video/send", upload.fields([{ name: "coverImage" }, { name: "videoFile" }]), (req, res) => {
-  const { videoName, videoDescription, username,uid} = req.body;
+  const { videoName, videoDescription, username, uid } = req.body;
   const { coverImage, videoFile } = req.files;
   const timestamp = Date.now(); // 获取当前时间戳
   const date = new Date(timestamp).toISOString().slice(0, 19).replace('T', ' '); // 将时间戳转换为有效的日期和时间字符串
   var sql = "INSERT INTO videos (videoname, description, cover_image, video_file,username,date,uid) VALUES (?, ?, ?, ?, ?, ?, ?)";
-  var sqlArr = [videoName, videoDescription, coverImage[0].path, videoFile[0].path, username, date,uid];
+  var sqlArr = [videoName, videoDescription, coverImage[0].path, videoFile[0].path, username, date, uid];
   var callBack = (err, data) => {
     if (err) {
-      console.log("error!!!!!"+err);
+      console.log("error!!!!!" + err);
     } else {
       res.send({
         'list': data
@@ -260,5 +260,32 @@ router.get('/video/commends', async (req, res, next) => {
     }
   }
   dbConfig.sqlConnect(sql1, sqlArr1, callBack1);
+});
+
+
+/**
+ * 增加评论
+ */
+router.get('/video/addCommend', async (req, res, next) => {
+  let { vid, uid, content } = req.query;
+  const timestamp = Date.now(); // 获取当前时间戳
+  const date = new Date(timestamp).toISOString().slice(0, 19).replace('T', ' '); // 将时间戳转换为有效的日期和时间字符串
+
+  var sql = "insert into comments (vid,uid, content,date) values (?,?, ?,?)";
+  var sqlArr = [vid, uid, content, date];
+  let code = 0;
+  let msg = '添加评论成功';
+  var callBack = (err, data) => {
+    if (err) {
+      code = 10004;
+      msg = '添加评论失败，请重试'
+    }
+    res.send({
+      'code': code,
+      'msg': msg,
+      'data': data
+    })
+  }
+  dbConfig.sqlConnect(sql, sqlArr, callBack);
 });
 module.exports = router;
