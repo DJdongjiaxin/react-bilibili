@@ -20,6 +20,11 @@ const Space = (props) => {
       </div>
       <div className={style.banner}>
         <img src={banner} />
+        <div>
+          <span>编辑信息</span>
+          <span>退出登录</span>
+          <span>平台反馈</span>
+        </div>
       </div>
       {
         props.router.map((route, i) =>
