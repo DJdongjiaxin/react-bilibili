@@ -164,4 +164,30 @@ router.post("/user/uploadInfo", upload.fields([{ name: "avatar" }]), (req, res) 
 
   dbConfig.sqlConnect(sql, sqlArr, callBack)
 });
+
+/**
+ * 用户反馈
+ */
+router.get('/user/addFeedback', async (req, res, next) => {
+  let { feedback, uid} = req.query;
+  const timestamp = Date.now(); // 获取当前时间戳
+  const date = new Date(timestamp).toISOString().slice(0, 19).replace('T', ' '); // 将时间戳转换为有效的日期和时间字符串
+
+  var sql = "insert into feedback (feedback,uid, date) values (?,?, ?)";
+  var sqlArr = [feedback, uid, date];
+  let code = 0;
+  let msg = '反馈成功';
+  var callBack = (err, data) => {
+    if (err) {
+      code = 10004;
+      msg = '反馈失败，请重试'
+    }
+    res.send({
+      'code': code,
+      'msg': msg,
+      'data': data
+    })
+  }
+  dbConfig.sqlConnect(sql, sqlArr, callBack);
+});
 module.exports = router;

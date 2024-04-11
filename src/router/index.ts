@@ -54,6 +54,10 @@ const router = [
     component: loadable(() => import(/* webpackChunkName: 'search' */ "../views/editInfo/editInfo")),
   },
   {
+    path: "/feedback",
+    component: loadable(() => import(/* webpackChunkName: 'search' */ "../views/feedback/feedback")),
+  },
+  {
     path: "/space",
     component: loadable(() => import(/* webpackChunkName: 'space' */ "../views/space/Space")),
     routes: [

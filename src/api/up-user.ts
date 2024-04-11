@@ -1,5 +1,5 @@
 import { getJSON, postJSON } from "./fetch";
-import { URL_UP_USER, URL_USER_VIDEO, URL_GET_USER_INFO, URL_USER_LOGIN, URL_USER_REGISTER } from "./url";
+import { URL_UP_USER, URL_USER_VIDEO, URL_GET_USER_INFO, URL_USER_LOGIN, URL_USER_REGISTER, URL_ADD_FEEDBACK } from "./url";
 
 /**
  * 获取up主信息
@@ -29,4 +29,11 @@ export function login(number?: string, password?: string) {
  */
 export function register(username?: string, number?: string, password?: string) {
   return getJSON(URL_USER_REGISTER, { username, number, password });
+}
+
+/**
+ * 用户反馈
+ */
+export function addFeedback(feedback?: string, uid?: string) {
+  return getJSON(URL_ADD_FEEDBACK, { feedback, uid });
 }

@@ -22,9 +22,10 @@ const AdminManagement: React.FC<AdminManagementProps> = (props) => {
   React.useEffect(() => {
     const fetchData = async () => {
       const dummyData = [
-        { id: 1, name: 'John Doe', email: 'john.doe@example.com' },
-        { id: 2, name: 'Jane Doe', email: 'jane.doe@example.com' },
+        { uid: 1, name: 'John Doe', email: 'john.doe@example.com' },
+        { uid: 2, name: 'Jane Doe', email: 'jane.doe@example.com' },
       ];
+      
       setData(dummyData);
       setFilteredData(dummyData);
     };

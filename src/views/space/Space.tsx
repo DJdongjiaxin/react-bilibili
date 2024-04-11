@@ -27,7 +27,7 @@ const Space = (props) => {
         <div>
           <span onClick={()=>{  window.location.href = '/editInfo';}}>编辑信息</span>
           <span onClick={unLogin}>退出登录</span>
-          <span>平台反馈</span>
+          <span onClick={()=>{  window.location.href = '/feedback';}}>平台反馈</span>
         </div>
       </div>
       {

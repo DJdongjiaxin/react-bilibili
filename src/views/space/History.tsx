@@ -202,16 +202,16 @@ class History extends React.Component<null, HistoryState> {
             style={{ display: this.state.itemIndex === 2 ? "block" : "none" }}
             className={style.platformManagement}
           >
-            <div className={style.managementItem}>
+            <div className={style.managementItem} onClick={()=>{  window.location.href = '/admin/users';}}>
               <span>用户管理</span>
             </div>
-            <div className={style.managementItem}>
+            <div className={style.managementItem} onClick={()=>{  window.location.href = '/admin/videos';}}>
               <span>视频管理</span>
             </div>
-            <div className={style.managementItem}>
+            <div className={style.managementItem} onClick={()=>{  window.location.href = '/admin/comments';}}>
               <span>评论管理</span>
             </div>
-            <div className={style.managementItem}>
+            <div className={style.managementItem} onClick={()=>{  window.location.href = '/admin/feedback';}}>
               <span>查看反馈信息</span>
             </div>
           </div>

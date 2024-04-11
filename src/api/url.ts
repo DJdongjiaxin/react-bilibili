@@ -51,6 +51,8 @@ const URL_VIDEO_INFO = prefix + "/video/info";
 const URL_GET_ALL_COMMENTS = prefix + "/video/commends";
 // 增加评论
 const URL_ADD_COMMENT = prefix + "/video/addCommend";
+// 用户反馈
+const URL_ADD_FEEDBACK = prefix + "/user/addFeedback";
 export {
   URL_INDEX,
   URL_ROUND_SOWING,
@@ -84,5 +86,6 @@ export {
   URL_SEARCH_VIDEO,
   URL_VIDEO_INFO,
   URL_GET_ALL_COMMENTS,
-  URL_ADD_COMMENT
+  URL_ADD_COMMENT,
+  URL_ADD_FEEDBACK
 }
