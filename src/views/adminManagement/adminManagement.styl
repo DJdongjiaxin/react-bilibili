@@ -34,6 +34,15 @@
   font-weight: bold;
 }
 
+.edit {
+  background-color: #87cefa;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.3rem;
+  cursor: pointer;
+}
 .delete {
   background-color: #ff6347;
   color: #fff;
@@ -44,9 +53,6 @@
   cursor: pointer;
 }
 
-.delete:hover {
-  background-color: #ff4500;
-}
 
 /* Media queries for mobile devices */
 @media screen and (max-width: 768px) {
@@ -65,6 +71,10 @@
   }
 
   .delete {
+    padding: 0.125rem 0.25rem;
+    font-size: 0.75rem;
+  }
+  .edit {
     padding: 0.125rem 0.25rem;
     font-size: 0.75rem;
   }

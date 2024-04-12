@@ -190,4 +190,185 @@ router.get('/user/addFeedback', async (req, res, next) => {
   }
   dbConfig.sqlConnect(sql, sqlArr, callBack);
 });
+
+router.get('/admin/getUser', async (req, res, next) => {
+  var sql = "select id,username,number,role from user";
+  var sqlArr = [];
+  var callBack = (err, data) => {
+    if (err) {
+      console.log("error!!!!!");
+    } else {
+      res.send({
+        'list': data
+      })
+    }
+  }
+  dbConfig.sqlConnect(sql, sqlArr, callBack)
+});
+router.get('/admin/getComments', async (req, res, next) => {
+  var sql = "select cid,vid,uid,content from comments";
+  var sqlArr = [];
+  var callBack = (err, data) => {
+    if (err) {
+      console.log("error!!!!!");
+    } else {
+      res.send({
+        'list': data
+      })
+    }
+  }
+  dbConfig.sqlConnect(sql, sqlArr, callBack)
+});
+router.get('/admin/getVideos', async (req, res, next) => {
+  var sql = "select id,videoname,description from videos";
+  var sqlArr = [];
+  var callBack = (err, data) => {
+    if (err) {
+      console.log("error!!!!!");
+    } else {
+      res.send({
+        'list': data
+      })
+    }
+  }
+  dbConfig.sqlConnect(sql, sqlArr, callBack)
+});
+router.get('/admin/getFeedback', async (req, res, next) => {
+  var sql = "select fid,feedback,uid from feedback";
+  var sqlArr = [];
+  var callBack = (err, data) => {
+    if (err) {
+      console.log("error!!!!!");
+    } else {
+      res.send({
+        'list': data
+      })
+    }
+  }
+  dbConfig.sqlConnect(sql, sqlArr, callBack)
+});
+router.get('/admin/getFeedback', async (req, res, next) => {
+  var sql = "select feedback,uid from feedback";
+  var sqlArr = [];
+  var callBack = (err, data) => {
+    if (err) {
+      console.log("error!!!!!");
+    } else {
+      res.send({
+        'list': data
+      })
+    }
+  }
+  dbConfig.sqlConnect(sql, sqlArr, callBack)
+});
+/**
+ * 删除用户
+ */
+router.get('/admin/delUser', async (req, res, next) => {
+  let {id} = req.query;
+  var sql = "DELETE FROM user WHERE id = ?";
+  var sqlArr = [id];
+  let code = 0;
+  let msg = '删除用户成功';
+  var callBack = (err, data) => {
+    if (err) {
+      code = 10004;
+      msg = '删除用户失败，请重试'
+    }
+    res.send({
+      'code': code,
+      'msg': msg,
+      'data': data
+    })
+  }
+  dbConfig.sqlConnect(sql, sqlArr, callBack);
+});
+/**
+ * 删除视频
+ */
+router.get('/admin/delVideo', async (req, res, next) => {
+  let {id} = req.query;
+  var sql = "DELETE FROM videos WHERE id = ?";
+  var sqlArr = [id];
+  let code = 0;
+  let msg = '删除视频成功';
+  var callBack = (err, data) => {
+    if (err) {
+      code = 10004;
+      msg = '删除视频失败，请重试'
+    }
+    res.send({
+      'code': code,
+      'msg': msg,
+      'data': data
+    })
+  }
+  dbConfig.sqlConnect(sql, sqlArr, callBack);
+});
+/**
+ * 删除评论
+ */
+router.get('/admin/delComment', async (req, res, next) => {
+  let {id} = req.query;
+  var sql = "DELETE FROM comments WHERE cid = ?";
+  var sqlArr = [id];
+  let code = 0;
+  let msg = '删除评论成功';
+  var callBack = (err, data) => {
+    if (err) {
+      code = 10004;
+      msg = '删除评论失败，请重试'
+    }
+    res.send({
+      'code': code,
+      'msg': msg,
+      'data': data
+    })
+  }
+  dbConfig.sqlConnect(sql, sqlArr, callBack);
+});
+/**
+ * 删除反馈
+ */
+router.get('/admin/delFeedback', async (req, res, next) => {
+  let {id} = req.query;
+  var sql = "DELETE FROM feedback WHERE fid = ?";
+  var sqlArr = [id];
+  let code = 0;
+  let msg = '删除反馈成功';
+  var callBack = (err, data) => {
+    if (err) {
+      code = 10004;
+      msg = '删除反馈失败，请重试'
+    }
+    res.send({
+      'code': code,
+      'msg': msg,
+      'data': data
+    })
+  }
+  dbConfig.sqlConnect(sql, sqlArr, callBack);
+});
+/**
+ * 修改用户角色
+ */
+router.get('/admin/editRole', async (req, res, next) => {
+  let {role,id} = req.query;
+  var sql = "UPDATE user SET role=? where id=?";
+  var sqlArr = [role,id];
+  let code = 0;
+  let msg = '修改角色成功';
+  var callBack = (err, data) => {
+    if (err) {
+      code = 10004;
+      msg = '修改角色失败，请重试'
+    }
+    res.send({
+      'code': code,
+      'msg': msg,
+      'data': data
+    })
+  }
+  dbConfig.sqlConnect(sql, sqlArr, callBack);
+});
 module.exports = router;

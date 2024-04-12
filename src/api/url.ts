@@ -53,6 +53,28 @@ const URL_GET_ALL_COMMENTS = prefix + "/video/commends";
 const URL_ADD_COMMENT = prefix + "/video/addCommend";
 // 用户反馈
 const URL_ADD_FEEDBACK = prefix + "/user/addFeedback";
+
+/**
+ * 管理员能力
+ */
+// 展示用户信息
+const URL_ADMIN_USERS = prefix + "/admin/getUser";
+// 展示评论信息
+const URL_ADMIN_COMMENTS = prefix + "/admin/getComments";
+// 展示视频信息
+const URL_ADMIN_VIDEOS = prefix + "/admin/getVideos";
+// 展示反馈信息
+const URL_ADMIN_FEEDBACK = prefix + "/admin/getFeedback";
+// 删除用户
+const URL_ADMIN_DELUSER = prefix + "/admin/delUser";
+// 删除评论
+const URL_ADMIN_DELCOMMENT = prefix + "/admin/delComment";
+// 删除反馈
+const URL_ADMIN_DELFEEDBACK = prefix + "/admin/delFeedback";
+// 删除视频
+const URL_ADMIN_DELVIDEO = prefix + "/admin/delVideo";
+// 修改用户角色
+const URL_ADMIN_EDITROLE = prefix + "/admin/editRole";
 export {
   URL_INDEX,
   URL_ROUND_SOWING,
@@ -87,5 +109,14 @@ export {
   URL_VIDEO_INFO,
   URL_GET_ALL_COMMENTS,
   URL_ADD_COMMENT,
-  URL_ADD_FEEDBACK
+  URL_ADD_FEEDBACK,
+  URL_ADMIN_USERS,
+  URL_ADMIN_COMMENTS,
+  URL_ADMIN_VIDEOS,
+  URL_ADMIN_FEEDBACK,
+  URL_ADMIN_DELUSER,
+  URL_ADMIN_DELCOMMENT,
+  URL_ADMIN_DELFEEDBACK,
+  URL_ADMIN_DELVIDEO,
+  URL_ADMIN_EDITROLE
 }
