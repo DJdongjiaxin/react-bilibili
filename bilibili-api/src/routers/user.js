@@ -199,6 +199,8 @@ router.get('/admin/getUser', async (req, res, next) => {
       console.log("error!!!!!");
     } else {
       res.send({
+        'code':0,
+        'msg':'查询用户成功',
         'list': data
       })
     }

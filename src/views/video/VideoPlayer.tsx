@@ -129,7 +129,10 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
 
     // 非直播时处理
     if (live === false) {
-      this.getBarrages();
+      if(new URLSearchParams(window.location.search).get('vid') === null){
+        this.getBarrages();
+      }
+     
 
       videoDOM.addEventListener("timeupdate", () => {
         if (this.state.duration === 0) {
@@ -434,19 +437,53 @@ class VideoPlayer extends React.PureComponent<VideoPlayerProps, VideoPlayerState
           ref={this.videoRef} />
         <div className={style.barrage}>
           <Barrage opacity={live === false ? 0.75 : 1} ref={this.barrageRef} />
-          <form>
+          <form
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '90%',
+            marginTop:'0.5rem',
+            marginBottom: '0.5rem',
+            marginLeft:'0.5rem',
+            marginRight:'0.5rem',
+          }}
+          >
             <input
               type="text"
               placeholder="输入弹幕"
+              style={{
+                flex: 1,
+                padding: '0.3rem',
+                fontSize: '0.7rem',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+              }}
               onChange={(e) => {
                 this.setState({
                   barrageText: e.target.value
                 });
               }}
             />
-            <div onClick={()=>{
-                  this.sendBarrage({ color: "#fff", content: this.state.barrageText })
-            }}>发送</div>
+             <button
+                      type="button"
+                      onClick={() => {
+                        this.sendBarrage({ color: "#fff", content: this.state.barrageText })
+                      }}
+                      style={{
+                        backgroundColor: '#FAC3E4',
+                        color: '#fff',
+                        padding: '0.3rem 0.7rem',
+                        fontSize: '0.7rem',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        marginLeft: '0.5rem',
+                      }}
+                    >
+                      发送
+                    </button>
           </form>
         </div>
         <div className={style.controls} onClick={() => { this.showOrHideControls(); }}>

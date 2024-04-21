@@ -119,7 +119,6 @@ class Detail extends React.Component<DetailProps, DetailState> {
         viewAt: new Date().getTime()
       });
       this.getComments();
-
     }
     this.getAllComments();
     this.getRecommentVides();
@@ -348,19 +347,52 @@ class Detail extends React.Component<DetailProps, DetailState> {
                   <div className={style.commentTitle}>
                     评论<span className={style.commentCount}>(&nbsp;{this.state.comments.length}&nbsp;)</span>
                   </div>
-                  <form>
+                  <form
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      width: '90%',
+                      marginBottom: '1rem',
+                      marginLeft:'0.5rem',
+                      marginRight:'0.5rem',
+                    }}
+                  >
                     <input
                       type="text"
                       placeholder="输入评论"
+                      style={{
+                        flex: 1,
+                        padding: '0.3rem',
+                        fontSize: '0.7rem',
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
+                      }}
                       onChange={(e) => {
                         this.setState({
                           commentText: e.target.value
                         });
                       }}
                     />
-                    <div onClick={() => {
-                      this.addComment(this.state.commentText)
-                    }}>发送</div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        this.addComment(this.state.commentText);
+                      }}
+                      style={{
+                        backgroundColor: '#FAC3E4',
+                        color: '#fff',
+                        padding: '0.3rem 0.7rem',
+                        fontSize: '0.7rem',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        marginLeft: '0.5rem',
+                      }}
+                    >
+                      发送
+                    </button>
                   </form>
                   <div className={style.commentList}>
                     {

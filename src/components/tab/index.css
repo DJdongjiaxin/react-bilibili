@@ -39,9 +39,9 @@
 }
 
 .tabbar_btn.camera {
-  width: 3rem;
-  height: 3rem;
-  margin: 0.5rem 1rem 0;
+  width: 4.5rem;
+  height: 4.5rem;
+  margin: -0.3rem 1rem 0;
   background-image: url(../../assets/images/tabbar_camera.png);
 }
 
